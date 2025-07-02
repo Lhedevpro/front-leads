@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -24,7 +24,6 @@ import {
 } from '@mui/material';
 import {
   Twitter,
-  Star,
   Refresh
 } from '@mui/icons-material';
 import axios from 'axios';
@@ -122,19 +121,14 @@ function App() {
   const [contractPrices, setContractPrices] = useState(null);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
 
-  useEffect(() => {
-    loadLeads();
-    checkWalletConnection();
-  }, []);
-
-  const checkWalletConnection = async () => {
+  const checkWalletConnection = useCallback(async () => {
     if (web3Service.isWalletConnected()) {
       setWalletConnected(true);
       const address = await web3Service.getWalletAddress();
       setWalletAddress(address);
       await loadContractPrices();
     }
-  };
+  }, []);
 
   const loadContractPrices = async () => {
     try {
@@ -144,6 +138,36 @@ function App() {
       console.error('Error loading contract prices:', error);
     }
   };
+
+  const loadLeads = useCallback(async () => {
+    try {
+      setLoading(true);
+      const headers = {
+        'x-site-access': 'web3-prospects-2024-secret-key',
+        'x-origin': window.location.origin
+      };
+      
+      // Ajouter l'adresse wallet si connectée
+      if (walletAddress) {
+        headers['x-user-address'] = walletAddress;
+      }
+      
+      const response = await axios.get(`${API_BASE_URL}/prospects-vendables`, { headers });
+      setLeads(response.data.prospects || []);
+      setMetadata(response.data.metadata);
+      setError('');
+    } catch (err) {
+      setError(err.message || 'Failed to access vault');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [walletAddress]);
+
+  useEffect(() => {
+    loadLeads();
+    checkWalletConnection();
+  }, [loadLeads, checkWalletConnection]);
 
   const connectWallet = async () => {
     try {
@@ -176,31 +200,6 @@ function App() {
     setWalletConnected(false);
     setWalletAddress('');
     setSuccess('Wallet disconnected');
-  };
-
-  const loadLeads = async () => {
-    try {
-      setLoading(true);
-      const headers = {
-        'x-site-access': 'web3-prospects-2024-secret-key',
-        'x-origin': window.location.origin
-      };
-      
-      // Ajouter l'adresse wallet si connectée
-      if (walletAddress) {
-        headers['x-user-address'] = walletAddress;
-      }
-      
-      const response = await axios.get(`${API_BASE_URL}/prospects-vendables`, { headers });
-      setLeads(response.data.prospects || []);
-      setMetadata(response.data.metadata);
-      setError('');
-    } catch (err) {
-      setError(err.message || 'Failed to access vault');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handlePurchaseClick = (packageInfo) => {
