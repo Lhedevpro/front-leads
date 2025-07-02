@@ -35,6 +35,12 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:300
 axios.defaults.headers.common['x-site-access'] = 'web3-prospects-2024-secret-key';
 axios.defaults.headers.common['x-origin'] = window.location.origin;
 
+// Fonction helper pour les chemins d'images
+const getImagePath = (imageName) => {
+  const publicUrl = process.env.PUBLIC_URL || '';
+  return `${publicUrl}/imgs/${imageName}`;
+};
+
 // Thème sombre rouge et noir
 const darkTheme = createTheme({
   palette: {
@@ -261,7 +267,7 @@ function App() {
       price: contractPrices?.base ? formatEthPrice(parseFloat(contractPrices.base) * 10) : '0.005',
       description: 'Fresh leads for small outreach',
       popular: false,
-      backgroundImage: '/imgs/renard.png'
+      backgroundImage: getImagePath('renard.png')
     },
     {
       id: 2,
@@ -269,7 +275,7 @@ function App() {
       price: contractPrices?.medium ? formatEthPrice(parseFloat(contractPrices.medium) * 25) : '0.010',
       description: 'Most popular vault access',
       popular: true,
-      backgroundImage: '/imgs/limier.png'
+      backgroundImage: getImagePath('limier.png')
     },
     {
       id: 3,
@@ -277,7 +283,7 @@ function App() {
       price: contractPrices?.high ? formatEthPrice(parseFloat(contractPrices.high) * 50) : '0.018',
       description: 'Full vault access for large campaigns',
       popular: false,
-      backgroundImage: '/imgs/aigle.png'
+      backgroundImage: getImagePath('aigle.png')
     }
   ];
 
@@ -518,7 +524,7 @@ function App() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: 'url(/imgs/forest.png)',
+              backgroundImage: `url(${getImagePath('forest.png')}`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               opacity: 0.4,
