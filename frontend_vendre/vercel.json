@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_BASE_URL": "https://api-votre-nom.vercel.app/api",
+    "REACT_APP_NETWORK": "base",
+    "REACT_APP_CONTRACT_ADDRESS": "0xA55cD301A354Fdffcfa494eFD8A218440bbf227E",
+    "REACT_APP_NETWORK_RPC": "https://mainnet.base.org",
+    "REACT_APP_NETWORK_CHAIN_ID": "8453"
+  }
+} 
