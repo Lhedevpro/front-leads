@@ -524,7 +524,7 @@ function App() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: `url(${getImagePath('forest.png')}`,
+              backgroundImage: `url(${getImagePath('forest.png')})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               opacity: 0.4,
