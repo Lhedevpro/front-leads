@@ -29,7 +29,7 @@ import {
 import axios from 'axios';
 import web3Service from './services/web3Service';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3003/api';
+const API_BASE_URL = 'https://api-leads-3yyis8m15-lhedevpros-projects.vercel.app/api';
 
 // Configuration axios avec header secret pour bloquer les appels externes
 axios.defaults.headers.common['x-site-access'] = 'web3-prospects-2024-secret-key';
